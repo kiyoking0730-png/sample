@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>メール作成ツール</title>
+    <style>
+      .label { font-weight: bold; margin-top: 10px; display: block; }
+      #subject-box, #box {
+        width: 500px;
+        border: solid 2px rgb(13, 25, 117);
+        padding: 10px;
+        margin-bottom: 10px;
+        background-color: #f9f9f9;
+        white-space: pre-wrap; /* 改行を反映させる */
+      }
+      #subject-box { height: 1.5em; }
+      #box { height: auto; min-height: 100px; }
+      button { cursor: pointer; padding: 5px 15px; }
+    </style>
+  </head>
+  <body>
+    <label class="label">テンプレート：</label>
+    <select id="select">
+      <option value="" selected disabled>選んでね</option>
+      <option value="transfer">転送</option>
+      <option value="other">その他</option>
+    </select>
+
+    <label class="label">宛先：</label>
+    <select id="person">
+      <option value="" selected disabled>選んでね</option>
+      <option value="課長">課長</option>
+      <option value="部長">部長</option>
+      <option value="その他 様">様</option>
+    </select>
+
+    <hr>
+
+    <label class="label">件名：</label>
+    <div id="subject-box" contenteditable="true"></div>
+    <button id="copy-subject">件名をコピー</button>
+
+    <label class="label">本文：</label>
+    <div id="box" contenteditable="true"></div>
+    <button id="copy">本文をコピー</button>
+    
+    <button id="reset" style="margin-left: 50px;">リセット</button>
+
+    <div id="message" style="display: none">
+      <pre id="transfer">【件名】メール転送の件
+おはようございます。
+
+メール転送するします。
+よろしくお願い致します。</pre>
+
+      <pre id="other">【件名】会議の知らせ
+会議の時間です。
+
+ご準備ください。
+よろしくお願い致します。</pre>
+    </div>
+
+    <script>
+      const copyBtn = document.getElementById("copy");
+      const copySubBtn = document.getElementById("copy-subject");
+      const resetBtn = document.getElementById("reset");
+      const box = document.getElementById("box");
+      const subBox = document.getElementById("subject-box");
+      const selectMenu = document.getElementById("select");
+      const personInput = document.getElementById("person");
+
+      // プレビュー更新関数
+      function updatePreview() {
+        let person = personInput.value;
+        let select = selectMenu.value;
+
+        if (!select) return;
+
+        let msgElement = document.getElementById(select);
+        if (msgElement) {
+          // テキストを改行で分割
+          let lines = msgElement.innerText.trim().split('\n');
+          
+          // 1行目を件名、残りを本文にする
+          let subject = lines[0];
+          let bodyText = lines.slice(1).join('\n').trim();
+
+          subBox.innerText = subject;
+          box.innerText = `${person}\n\n${bodyText}`;
+        }
+      }
+
+      // イベント設定
+      selectMenu.addEventListener("change", updatePreview);
+      personInput.addEventListener("change", updatePreview);
+
+      // 本文コピー
+      copyBtn.addEventListener("click", function () {
+        if (!box.innerText) return alert("内容がないよ！");
+        navigator.clipboard.writeText(box.innerText).then(() => alert('本文をコピーしたよ'));
+      });
+
+      // 件名コピー
+      copySubBtn.addEventListener("click", function () {
+        if (!subBox.innerText) return alert("件名がないよ！");
+        navigator.clipboard.writeText(subBox.innerText).then(() => alert('件名をコピーしたよ'));
+      });
+
+      // リセット
+      resetBtn.addEventListener("click", () => location.reload());
+    </script>
+  </body>
+</html>
