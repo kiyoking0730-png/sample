@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .main {
+        width: 640px;
+        margin: 0 auto;
+      
+      }
+      .main-Img {
+      max-width: 100%;
+      }
+
+      .imgs {
+        display: flex;
+        gap: 20px;
+        justify-content: center;
+      }
+      .thumbs {
+        width: 200px;
+        filter: contrast(0.5);
+      }
+      .thumbs:hover {
+        filter: contrast(1);
+        transition: all 0.3s ease-in-out;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="main" class="main">
+      <img src="./img/gallery-1.png" alt="" id="mainImg" class="main-Img" />
+      <div class="imgs">
+        <img
+          src="./img/gallery-1.png"
+          class="thumbs"
+          alt=""
+          data-img="./img/gallery-1.png"
+        />
+        <img
+          src="./img/gallery-2.png"
+          class="thumbs"
+          alt=""
+          data-img="./img/gallery-2.png"
+        />
+        <img
+          src="./img/gallery-3.png"
+          class="thumbs"
+          alt=""
+          data-img="./img/gallery-3.png"
+        />
+      </div>
+    </div>
+  </body>
+  <script>
+    let main = document.getElementById("mainImg");
+    let thumbs = document.querySelectorAll(".thumbs");
+
+  thumbs.forEach((thumb) => {
+  thumb.addEventListener("click", function () {
+    // 魔法の1行で囲む！これだけで「前後の状態」をブラウザがアニメーションしてくれる
+    document.startViewTransition(() => {
+      main.src = this.dataset.img;
+    });
+  });
+});
+
+  </script>
+</html>
