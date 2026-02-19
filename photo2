@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      #wrapper {
+        width: 300px;
+        margin: 0 auto;
+      }
+      #main-img {
+        width: 300px;
+        height: 200px;
+      }
+      .list-img {
+        width: 100px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="wrapper">
+      <div class="imgs" id="img-container">
+        <img src="./img/gallery-1.png" alt="" id="main-img" />
+      </div>
+      <div id="thumb-container"></div>
+    </div>
+  </body>
+  <script>
+    // データのデータリスト（ここを増やすだけでOK）
+
+    let imgs = document.querySelector(".imgs");
+    let main = document.getElementById("main-img");
+    const thumbContainer = document.getElementById("thumb-container");
+
+    const imgList = [
+      { id: "img1", src: "./img/gallery-1.png", class: "list-img" },
+      { id: "img2", src: "./img/gallery-2.png", class: "list-img" },
+      { id: "img3", src: "./img/gallery-3.png", class: "list-img" },
+      { id: "img4", src: "./img/menu1.png", class: "list-img" },
+    ];
+    imgList.forEach((img) => {
+      const newImg = document.createElement("img");
+      newImg.src = img.src;
+      newImg.id = img.id;
+      newImg.className = img.class;
+      thumbContainer.appendChild(newImg);
+    });
+
+    const thumbs = document.querySelectorAll(".list-img");
+
+    thumbs.forEach((thumb) => {
+      thumb.addEventListener("click", function () {
+        console.log(this.src);
+        main.src = this.src;
+      });
+    });
+  </script>
+</html>
