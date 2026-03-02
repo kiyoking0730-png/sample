@@ -1,0 +1,36 @@
+function onEdit(e) {
+  // 編集された範囲を取得
+  const range = e.range;
+  const sheet = range.getSheet();
+  const sheetName = sheet.getName();
+  
+  // 1. 「入力用」シートの A3セル (プルダウン) が編集された場合のみ実行
+  // ※画像に基づきプルダウンの位置を A3 と想定しています
+  if (sheetName === "入力用" && range.getA1Notation() === "A3") {
+    
+    const selectedValue = range.getValue(); // 選択された項目名
+    const targetCell = sheet.getRange("A5"); // 文章を入力するセル
+    
+    // 選択が空になった場合はクリアして終了
+    if (!selectedValue) {
+      targetCell.setValue("");
+      return;
+    }
+
+    // 2. 「メール」シートからデータを取得
+    const dataSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("メール");
+    const data = dataSheet.getDataRange().getValues(); // シート全体のデータを配列で取得
+
+    // 3. 該当する文章を検索
+    let message = "該当する文章が見つかりませんでした";
+    for (let i = 0; i < data.length; i++) {
+      if (data[i][0] === selectedValue) { // A列が一致したら
+        message = data[i][1];             // B列の文章を取得
+        break;
+      }
+    }
+
+    // 4. 入力用シートの A5セルにセット
+    targetCell.setValue(message);
+  }
+}
